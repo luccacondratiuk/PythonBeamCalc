@@ -3,12 +3,16 @@ class SingleLoad():
         super().__init__()
         self.intensity = intensity
         self.position = position
-        self.shearEquation = {"a":intensity}
-        self.momentEquation = {"b":intensity, "a":intensity*position}
+        self.shearEquation = {}
+        self.momentEquation = {}
+        
 
     def calcMomento(self, relative_position:float):
         return ((self.intensity)*(self.position-relative_position))
 
+    def shear_moment_equations(self):
+        self.shearEquation = {"a": self.intensity}
+        self.momentEquation = {"b":self.intensity, "a":self.intensity*self.position}
 
 class DistributedLoad():
     def __init__(self, initial_position:float, final_position:float):
