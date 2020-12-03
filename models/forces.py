@@ -76,13 +76,13 @@ class LinearDistributedLoad(DistributedLoad):
 
 
 #Código de teste das classes
-ab = ConstantDistributedLoad(3,5,10)
-print(ab.load.intensity,ab.load.position)
-print(f"{ab.shearEquation['b']}x + {ab.shearEquation['a']}")
-print(f"{ab.momentEquation['c']}x² + {ab.momentEquation['b']}x + {ab.momentEquation['a']}")
-print()
-print('---------------------------')
-print()
-ab = LinearDistributedLoad(3,5,5,10)
-print(f"{ab.shearEquation['c']}x² + {ab.shearEquation['b']}x + {ab.shearEquation['a']}")
-print(f"{ab.momentEquation['d']}x³ + {ab.momentEquation['c']}x² + {ab.momentEquation['b']}x + {ab.momentEquation['a']}")
+#ab = ConstantDistributedLoad(3,5,10)
+# print(ab.load.intensity,ab.load.position)
+# print(f"{ab.shearEquation['b']}x + {ab.shearEquation['a']}")
+# print(f"{ab.momentEquation['c']}x² + {ab.momentEquation['b']}x + {ab.momentEquation['a']}")
+# print()
+# print('---------------------------')
+# print()
+# ab = LinearDistributedLoad(3,5,5,10)
+# print(f"{ab.shearEquation['c']}x² + {ab.shearEquation['b']}x + {ab.shearEquation['a']}")
+# print(f"{ab.momentEquation['d']}x³ + {ab.momentEquation['c']}x² + {ab.momentEquation['b']}x + {ab.momentEquation['a']}")
