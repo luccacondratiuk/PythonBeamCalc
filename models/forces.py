@@ -29,7 +29,7 @@ class LinearDistributedLoad(DistributedLoad):
         super(LinearDistributedLoad, self).__init__(initial_position, final_position)
         self.fi = initial_intensity
         self.ff = final_intensity
-        self.load = SingleLoad(((initial_intensity+final_intensity)*(final_position-initial_position)/2),self._calcCentroid())
+        self.load = SingleLoad(((initial_intensity+final_intensity)*(final_position-initial_position)/2),self._calcCentroid()+self.xi)
 
     def _calcCentroid(self):
         if ((self.fi*self.ff)!=0):
@@ -42,9 +42,9 @@ class LinearDistributedLoad(DistributedLoad):
                 _xc2 = ((2/3)*(self.xf - self.xi))
             else:
                 _xc2 = ((1/3)*(self.xf - self.xi))
-            return ((((_area1*_xc1)+(_area2*_xc2))/(_area1+_area2))+self.xi)
+            return ((((_area1*_xc1)+(_area2*_xc2))/(_area1+_area2)))
         else:
-            if (self.fi-self.ff < 0):
+            if (self.ff-self.fi < 0):
                 return ((2/3)*(self.xf - self.xi))
             else:
                 return ((1/3)*(self.xf - self.xi))
