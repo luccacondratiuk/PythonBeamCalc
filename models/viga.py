@@ -7,6 +7,8 @@ class Viga():
         self.moment_of_inertia = moments_of_inertia # cria um atributo com os momentos de inércia e suas respectivas posições, também informados pelo usuário
         self.sectionsData = []
         self.forceBalance()
+        for i in  self.reactions:
+            i.shear_moment_equations()
         self._sections()
 
     #função responsável pelo cálculo do equilíbrio de forças, isto é, calculo das reações  
@@ -55,25 +57,25 @@ class Viga():
             if (i==0):
                 self.sectionsData.append({
                     'position':[0,a[i]],
-                    'sheer':None,
+                    'shear':None,
                     'flector':None
                 })
             elif (i==(len(a)-1)):
                 self.sectionsData.append({
                     'position':[a[i-1],a[i]],
-                    'sheer':None,
-                    'flector':None
+                    'shear':None,
+                    'moment':None
                 })
                 self.sectionsData.append({
                     'position':[a[i],self.length],
-                    'sheer':None,
-                    'flector':None
+                    'shear':None,
+                    'moment':None
                 })
             else:
                 self.sectionsData.append({
                     'position':[a[i-1],a[i]],
-                    'sheer':None,
-                    'flector':None
+                    'shear':None,
+                    'moment':None
                 })
 
 
