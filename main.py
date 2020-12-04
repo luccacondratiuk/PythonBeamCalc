@@ -1,31 +1,76 @@
-comprimento = int(input("Digite o comprimento da viga: "))
-x_apoio1 = int(input("Digite o ponto do primeiro apoio: "))
-x_apoio2 = int(input("Digite o ponto do segundo apoio: "))
-n_forcas = int(input("Digite o número de forças pontuais conhecidas: "))
-n_cargas_distribuidas = int(input("Digite o número de cargas distribuídas conhecidas: "))
-n_momentos = int(input("Digite o número de momentos conhecidos: "))
+import models.forces as load
+import models.viga as viga
 
-print("------------------------")
-print("---------Forças---------")
-print("------------------------")
-forcas = []
-for i in range(n_forcas):
-    force = {}
-    force["Intensidade"] = float(input("Digite a intensidade da força {$}"))
-    force["Posição"] = float(input("Digite a posição da força {$}"))
-    forcas.append(force)
+print("-------------------------------------------------------------")
+print("--------------------------- Vigas ---------------------------")
+print("-------------------------------------------------------------")
+print()
+print()
+support_posi = []
+viga_length = float(input("Digite o comprimento da viga (m): "))
+a = float(input("Digite a posição do primeiro apoio (m): "))
+b = float(input("Digite a posição do segundo apoio (m): "))
+support_posi.append(load.SingleLoad(a,0))
+support_posi.append(load.SingleLoad(b,0))
+n_forces = int(input("Digite o número de forças pontuais conhecidas: "))
+n_distloads = int(input("Digite o número cargas distribuídas conhecidas: "))
+n_moments = int(input("Digite o número de momentos conhecidos: "))
+forces = []
+distloads = []
+moments = []
+print()
+print()
+print()
+print()
+print("--------------------------------------------------------------")
+print("--------------------------- Forças ---------------------------")
+print("--------------------------------------------------------------")
+print()
+print()
+for i in range(n_forces):
+    a = float(input(f"Digite a posição da força {i+1} (m): "))
+    b = float(input(f"Digite a intensidade da força {i+1} (sinal negativo para uma força 'para baixo', em newtons): "))
+    forces.append(load.SingleLoad(a,b))
+print()
+print()
+print("-------------------------------------------------------------")
+print("-------------------- Cargas Distribuídas --------------------")
+print("-------------------------------------------------------------")
+print()
+print()
+for i in range(n_distloads):
+    a = float(input(f"Digite a posição inicial, da carga {i+1} (m): "))
+    b = float(input(f"Digite a posição final, da carga {i+1} (m): "))
+    c = float(input(f"Digite a intensidade inicial da carga {i+1} (sinal negativo para uma força 'para baixo', em N/m): "))
+    d = float(input(f"Digite a intensidade final da carga {i+1} (sinal negativo para uma força 'para baixo', em N/m): "))
+    if (c==d):
+        distloads.append(load.ConstantDistributedLoad(a,b,c))
+    else:
+        distloads.append(load.LinearDistributedLoad(a,b,c,d))    
+print()
+print()
+print("--------------------------------------------------------------")
+print("-------------------------- Momentos --------------------------")
+print("--------------------------------------------------------------")
+print()
+print()
+for i in range(n_moments):
+    a = float(input(f"Digite a posição do momento {i+1} (m): "))
+    b = float(input(f"Digite a intensidade do momento {i+1} (sinal negativo para sentido horário - N*m): "))
+    moments.append(load.Moment(a,b))
+custom_viga = viga.Viga(viga_length,support_posi,forces,distloads,moments)
 
-print("------------------------")
-print("--Equilíbrio de Forças--")
-print("------------------------")
-
-somatorio_forcas = 0
-somatorio_momentos = 0
-for i in range(len(forcas)):
-    somatorio_forcas+=forcas[i]["Intensidade"]
-    somatorio_momentos+=((forcas[i]["Intensidade"])*(forcas[i]["Posição"]-x_apoio1))
-
-apoio2 = ((-(somatorio_momentos)))/(x_apoio2-x_apoio1)
-apoio1 = -(somatorio_forcas+apoio2)
-
-print(apoio1, apoio2)
+print(f"Reação 1 = {custom_viga.reactions[0].intensity}")
+print(f"Reação 2 = {custom_viga.reactions[1].intensity}")
+print()
+custom_viga.calcShearAndMoment()
+for i in range(len(custom_viga.sectionsData)):
+    print()
+    print("-------------------------------------------------------------------------------------------")
+    print(f"----------------------------------------- Seção {i+1} -----------------------------------------")
+    print(f"--------------------------------------- {custom_viga.sectionsData[i]['position'][0]} <= X < {custom_viga.sectionsData[i]['position'][1]} ---------------------------------------")
+    print()
+    print(f"Esforço Cortante: {custom_viga.sectionsData[i]['shear']['d']}x³ + {custom_viga.sectionsData[i]['shear']['c']}x² + {custom_viga.sectionsData[i]['shear']['b']}x + {custom_viga.sectionsData[i]['shear']['a']}")
+    print(f"Momento Fletor: {custom_viga.sectionsData[i]['moment']['d']}x³ + {custom_viga.sectionsData[i]['moment']['c']}x² + {custom_viga.sectionsData[i]['moment']['b']}x + {custom_viga.sectionsData[i]['moment']['a']}")
+    print()
+    print()
